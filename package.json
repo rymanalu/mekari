@@ -1,12 +1,12 @@
 {
   "private": true,
+  "scripts": {
+    "dev": "gulp watch",
+    "prod": "gulp --production"
+  },
   "devDependencies": {
-      "admin-lte": "^2.3.11",
-      "axios": "^0.19",
-      "cross-env": "^5.1",
-      "font-awesome": "^4.7.0",
-      "laravel-mix": "^4.0.7",
-      "lodash": "^4.17.13",
-      "resolve-url-loader": "^2.3.1"
+    "admin-lte": "2.3.11",
+    "gulp": "^3.9.1",
+    "laravel-elixir": "^5.0.0"
   }
 }
