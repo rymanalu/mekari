@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "devDependencies": {
+      "admin-lte": "^2.3.11",
+      "axios": "^0.19",
+      "cross-env": "^5.1",
+      "font-awesome": "^4.7.0",
+      "laravel-mix": "^4.0.7",
+      "lodash": "^4.17.13",
+      "resolve-url-loader": "^2.3.1"
+  }
+}
