@@ -4,11 +4,12 @@
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Mekari Todo List App</title>
 
-        <link rel="stylesheet" type="text/css" href="{{ elixir('css/admin-lte.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ elixir('css/app.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/admin-lte.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
         <link rel="stylesheet" type="text/css" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
         <link rel="icon" href="/favicon.ico">
@@ -40,21 +41,7 @@
 
             <div class="content-wrapper">
                 <div class="container">
-                    <section class="content-header">
-                        <h1>Todo List</h1>
-                    </section>
-
-                    <section class="content">
-                        <div class="box box-default">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Blank Box</h3>
-                            </div>
-
-                            <div class="box-body">
-                                The great content goes here
-                            </div>
-                        </div>
-                    </section>
+                    @yield('content')
                 </div>
             </div>
 
@@ -67,7 +54,11 @@
             </footer>
         </div>
 
-        <script type="text/javascript" src="{{ elixir('js/admin-lte.js') }}"></script>
-        <script type="text/javascript" src="{{ elixir('js/app.js') }}"></script>
+        <script>
+            var APP_URL = '{{ config('app.url') }}';
+        </script>
+        <script src="{{ asset('js/admin-lte.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+        @stack('scripts')
     </body>
 </html>
