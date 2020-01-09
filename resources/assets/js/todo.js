@@ -2,23 +2,19 @@ let todos = [];
 const todoListEl = $('#todo-list');
 
 function getTodos() {
-  // Just for testing for a while...
   return new Promise(resolve => {
-    setTimeout(() => {
-      todos = [
-        {
-          task: 'Cook',
-          done: false
-        },
-        {
-          task: 'Code',
-          done: true
-        }
-      ];
+    request('/api/todos').then(data => {
+      todos = data;
 
       resolve();
-    }, 1500);
-  });
+    }).catch(err => {
+      console.error(err);
+
+      todos = [];
+
+      resolve();
+    });
+  })
 }
 
 function renderTodoList() {
@@ -26,7 +22,27 @@ function renderTodoList() {
     todoListEl.empty();
 
     if (todos.length > 0) {
-      todoListEl.append(`You have ${todos.length} todo for now.`);
+      const todoList = todos.map(todo => {
+        let { task } = todo;
+        let checked = '';
+        const delEl = `<a href="#" style="text-decoration:none; color:red;" title="Delete">
+          [<i class="glyphicon glyphicon-trash"></i>]
+        </a>`;
+
+        if (todo.done) {
+          task = `<del>${todo.task}</del>`;
+          checked = ' checked';
+        }
+
+        return `<div class="checkbox">
+          <label>
+            <input type="checkbox"${checked}> ${task} ${delEl}
+          </label>
+        </div>`;
+      }).join('');
+
+      todoListEl.append(todoList);
+      todoListEl.append(`<button class="btn btn-danger">Delete Selected</button>`);
     } else {
       todoListEl.append('You have no todo for now.');
     }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Todo;
+
 class TodoController extends Controller
 {
     /**
@@ -12,5 +14,15 @@ class TodoController extends Controller
     public function index()
     {
         return view('todo');
+    }
+
+    /**
+     * Show all todos.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all()
+    {
+        return Todo::all();
     }
 }
