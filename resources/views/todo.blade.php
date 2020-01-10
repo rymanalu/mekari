@@ -9,14 +9,14 @@
                     <h3 class="box-title">Create a new Todo</h3>
                 </div>
 
-                <form class="form-horizontal">
+                <form class="form-horizontal" onsubmit="return false;">
                     <div class="box-body">
                         <div class="form-group">
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="task" placeholder="Type in a new Todo...">
+                                <input type="text" class="form-control" id="task" placeholder="Type in a new Todo..." required>
                             </div>
                             <div class="col-sm-2">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" id="submit">
                                     <i class="glyphicon glyphicon-plus"></i>
                                 </button>
                             </div>

@@ -1,5 +1,21 @@
 let todos = [];
 const todoListEl = $('#todo-list');
+const taskFieldEl = $('#task');
+const submitBtnEl = $('#submit');
+
+submitBtnEl.click(() => {
+  saveTodo().then(() => {
+    taskFieldEl.val('');
+
+    getTodos().then(() => {
+      renderTodoList();
+    });
+  }).catch(err => {
+    alert(err);
+
+    console.error(err);
+  });
+});
 
 function getTodos() {
   return new Promise(resolve => {
@@ -48,6 +64,24 @@ function renderTodoList() {
     }
 
     resolve();
+  });
+}
+
+function saveTodo() {
+  const task = taskFieldEl.val();
+
+  return new Promise((resolve, reject) => {
+    if (task.length < 1) {
+      reject(`Todo shouldn't empty.`);
+
+      return;
+    }
+
+    request('/api/todos', 'POST', { task }).then(data => {
+      resolve(data);
+    }).catch(err => {
+      reject(err);
+    });
   });
 }
 
