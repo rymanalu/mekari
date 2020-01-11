@@ -39,7 +39,7 @@ function renderTodoList() {
 
     if (todos.length > 0) {
       const todoList = todos.map(todo => {
-        let { task } = todo;
+        let { id, task } = todo;
         let checked = '';
         const delEl = `<a href="#" style="text-decoration:none; color:red;" title="Delete">
           [<i class="glyphicon glyphicon-trash"></i>]
@@ -52,7 +52,7 @@ function renderTodoList() {
 
         return `<div class="checkbox">
           <label>
-            <input type="checkbox"${checked}> ${task} ${delEl}
+            <input type="checkbox"${checked} todo-id="${id}" class="todo-checkbox"> ${task} ${delEl}
           </label>
         </div>`;
       }).join('');
@@ -85,6 +85,16 @@ function saveTodo() {
   });
 }
 
+function updateTodoStatus(id, done) {
+  return new Promise((resolve, reject) => {
+    request(`/api/todos/${id}`, 'PUT', { done }).then(data => {
+      resolve(data);
+    }).catch(err => {
+      reject(err);
+    });
+  });
+}
+
 function mounted() {
   renderTodoList().then(() => {
     getTodos().then(() => {
@@ -94,5 +104,23 @@ function mounted() {
 }
 
 $(document).ready(() => {
+  $('#todo-list').on('click', '.todo-checkbox', e => {
+    const todo = $(e.target);
+    const id = todo.attr('todo-id');
+    const done = todo.is(':checked');
+
+    updateTodoStatus(id, done).then(() => {
+      e.preventDefault();
+
+      getTodos().then(() => {
+        renderTodoList();
+      });
+    }).catch(err => {
+      alert(err);
+
+      console.error(err);
+    });
+  });
+
   mounted();
 });

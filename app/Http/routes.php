@@ -15,5 +15,6 @@ Route::get('/', 'TodoController@index');
 
 Route::group(['prefix' => 'api/todos'], function () {
     Route::get('/', 'TodoController@all');
+    Route::put('/{todo}', 'TodoController@update');
     Route::post('/', 'TodoController@store');
 });

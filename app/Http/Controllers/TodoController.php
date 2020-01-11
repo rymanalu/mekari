@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTodoRequest;
+use App\Http\Requests\UpdateTodoRequest;
 use App\Todo;
 
 class TodoController extends Controller
@@ -39,6 +40,20 @@ class TodoController extends Controller
             'task' => $request->input('task'),
             'done' => false,
         ]);
+
+        return $todo;
+    }
+
+    /**
+     * Update a todo with new data.
+     *
+     * @param  \App\Http\Requests\UpdateTodoRequest  $request
+     * @param  \App\Todo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function update(UpdateTodoRequest $request, Todo $todo)
+    {
+        $todo->update($request->all());
 
         return $todo;
     }
