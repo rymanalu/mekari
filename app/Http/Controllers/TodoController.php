@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTodoRequest;
+use App\Http\Requests\DeleteTodoBulkRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Todo;
 
@@ -69,5 +70,18 @@ class TodoController extends Controller
         $todo->delete();
 
         return $todo;
+    }
+
+    /**
+     * Delete selected todos.
+     *
+     * @param  \App\Http\Requests\DeleteTodoBulkRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyBulk(DeleteTodoBulkRequest $request)
+    {
+        Todo::whereIn('id', $request->input('id'))->delete();
+
+        return $request->input('id');
     }
 }

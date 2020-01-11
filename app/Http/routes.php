@@ -14,6 +14,7 @@
 Route::get('/', 'TodoController@index');
 
 Route::group(['prefix' => 'api/todos'], function () {
+    Route::post('/delete-bulk', 'TodoController@destroyBulk');
     Route::get('/', 'TodoController@all');
     Route::put('/{todo}', 'TodoController@update');
     Route::delete('/{todo}', 'TodoController@destroy');

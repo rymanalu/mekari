@@ -2,6 +2,7 @@ let todos = [];
 const todoListEl = $('#todo-list');
 const taskFieldEl = $('#task');
 const submitBtnEl = $('#submit');
+let selectedTodos = [];
 
 submitBtnEl.click(() => {
   saveTodo().then(() => {
@@ -58,7 +59,7 @@ function renderTodoList() {
       }).join('');
 
       todoListEl.append(todoList);
-      todoListEl.append(`<button class="btn btn-danger">Delete Selected</button>`);
+      todoListEl.append(`<button class="btn btn-danger todo-delete-bulk">Delete Selected</button>`);
     } else {
       todoListEl.append('You have no todo for now.');
     }
@@ -105,10 +106,26 @@ function deleteTodo(id) {
   });
 }
 
+function deleteBulkTodos() {
+  return new Promise((resolve, reject) => {
+    request('/api/todos/delete-bulk', 'POST', { id: selectedTodos }).then(() => {
+      resolve();
+    }).catch(err => {
+      reject(err);
+    });
+  });
+}
+
 function mounted() {
   renderTodoList().then(() => {
     getTodos().then(() => {
       renderTodoList();
+
+      $('.todo-checkbox:checked').each((_, el) => {
+        const id = $(el).attr('todo-id');
+
+        selectedTodos.push(id);
+      });
     });
   });
 }
@@ -118,6 +135,16 @@ $(document).ready(() => {
     const todo = $(e.target);
     const id = todo.attr('todo-id');
     const done = todo.is(':checked');
+
+    if (done) {
+      selectedTodos.push(id);
+    } else {
+      const i = selectedTodos.indexOf(id);
+
+      if (i > -1) {
+        selectedTodos.splice(i, 1);
+      }
+    }
 
     updateTodoStatus(id, done).then(() => {
       e.preventDefault();
@@ -146,6 +173,22 @@ $(document).ready(() => {
 
       console.error(err);
     });
+  });
+
+  $('#todo-list').on('click', '.todo-delete-bulk', () => {
+    if (selectedTodos.length > 0) {
+      deleteBulkTodos().then(() => {
+        selectedTodos = [];
+
+        getTodos().then(() => {
+          renderTodoList();
+        });
+      }).catch(err => {
+        alert(err);
+
+        console.error(err);
+      });
+    }
   });
 
   mounted();
