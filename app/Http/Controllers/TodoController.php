@@ -57,4 +57,17 @@ class TodoController extends Controller
 
         return $todo;
     }
+
+    /**
+     * Delete given todo.
+     *
+     * @param  \App\Todo
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Todo $todo)
+    {
+        $todo->delete();
+
+        return $todo;
+    }
 }

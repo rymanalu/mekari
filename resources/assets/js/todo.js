@@ -41,8 +41,8 @@ function renderTodoList() {
       const todoList = todos.map(todo => {
         let { id, task } = todo;
         let checked = '';
-        const delEl = `<a href="#" style="text-decoration:none; color:red;" title="Delete">
-          [<i class="glyphicon glyphicon-trash"></i>]
+        const delEl = `<a href="#" style="text-decoration:none; color:red;" title="Delete" class="todo-delete" todo-id="${id}">
+          [<i class="glyphicon glyphicon-trash" todo-id="${id}"></i>]
         </a>`;
 
         if (todo.done) {
@@ -95,6 +95,16 @@ function updateTodoStatus(id, done) {
   });
 }
 
+function deleteTodo(id) {
+  return new Promise((resolve, reject) => {
+    request(`/api/todos/${id}`, 'DELETE').then(data => {
+      resolve(data);
+    }).catch(err => {
+      reject(err);
+    });
+  });
+}
+
 function mounted() {
   renderTodoList().then(() => {
     getTodos().then(() => {
@@ -110,6 +120,22 @@ $(document).ready(() => {
     const done = todo.is(':checked');
 
     updateTodoStatus(id, done).then(() => {
+      e.preventDefault();
+
+      getTodos().then(() => {
+        renderTodoList();
+      });
+    }).catch(err => {
+      alert(err);
+
+      console.error(err);
+    });
+  });
+
+  $('#todo-list').on('click', '.todo-delete', e => {
+    const id = $(e.target).attr('todo-id');
+
+    deleteTodo(id).then(() => {
       e.preventDefault();
 
       getTodos().then(() => {
